@@ -40,20 +40,26 @@ function isNum(src: string){
     return c == bound[0] || c == bound[1]
 }
 
-function makeToken(token: TokenType,src: string ): Token{
-   return {type: token, value: src} as Token
+function makeToken(type: TokenType,value: string ): Token{
+   return {type, value}
 }
 
 export function tokenizer(src: string): Token[]{
-    const splitted = src.split('')
+    const code = src.split('')
     const tokens : Token[] = [];
-    for (const splits of splitted){
-    if(splits == ":"){
-     tokens.push( makeToken(TokenType.Colon, splits))
-     
+    while(code.length > 0 ){
+    if(code[0] == ":"){
+     tokens.push( makeToken(TokenType.Colon, code.shift()! ))
+    }
+    else if (code[0] == "-" && code[1] == ">" || code[0] == "<" && code[1] == "-" ){
+        tokens.push(makeToken(TokenType.Flow_Movement, code.shift()!))
+    }
+    else if(code[0] == "{"){
+        tokens.push(makeToken(TokenType.OpenBrace, code.shift()!))
+    }
+    else if(code[0] == "}"){
+        tokens.push(makeToken(TokenType.CloseBrace, code.shift()!))
     }
     }
     return tokens
-
-    
 }
