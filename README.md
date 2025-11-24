@@ -17,7 +17,8 @@ This README documents the language logic, developer roadmap (lexer â†’ parser â†
 
 ---
 
-Example:
+Program Example:
+
 ACCOUNTS {
     Cash:              asset
     Bank:              asset
