@@ -10,7 +10,15 @@ export enum TokenType {
     Transaction,
     Opening,
     Closing,
-    REPORT
+    REPORT,
+    BinaryOp,
+    Flow_Movement,
+    Colon
+}
+
+export interface Token {
+    type: TokenType,
+    value: string
 }
 
 const KEYWORDS : Record<string,TokenType> = {
@@ -32,3 +40,20 @@ function isNum(src: string){
     return c == bound[0] || c == bound[1]
 }
 
+function makeToken(token: TokenType,src: string ): Token{
+   return {type: token, value: src} as Token
+}
+
+export function tokenizer(src: string): Token[]{
+    const splitted = src.split('')
+    const tokens : Token[] = [];
+    for (const splits of splitted){
+    if(splits == ":"){
+     tokens.push( makeToken(TokenType.Colon, splits))
+     
+    }
+    }
+    return tokens
+
+    
+}
