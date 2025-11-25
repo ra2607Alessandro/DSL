@@ -1,3 +1,4 @@
+import fs = require('fs');
 export enum TokenType {
     Number,
     Date,
@@ -121,5 +122,6 @@ export function tokenizer(src: string): Token[]{
   
 
 
-const test = 
-console.log(tokenizer("ACCOUNTS { Cash: asset}"))
+const test = fs.readFileSync("test.txt")
+const written = JSON.stringify(test, null, 2)
+console.log(tokenizer(written))
