@@ -57,7 +57,8 @@ export function tokenizer(src: string): Token[]{
      tokens.push(makeToken(TokenType.Colon, code.shift()! ))
     }
     else if ((code[0] == "-" && code[1] == ">") || (code[0] == "<" && code[1] == "-" )){
-        tokens.push(makeToken(TokenType.Flow_Movement, code.shift()!))
+      const pointer = code.shift()! + code.shift()!
+        tokens.push(makeToken(TokenType.Flow_Movement, pointer))
     }
     else if(code[0] == "{"){
         tokens.push(makeToken(TokenType.OpenBrace, code.shift()!))
@@ -86,30 +87,31 @@ export function tokenizer(src: string): Token[]{
             if( num.length == 4 && code[0] == "-"  ){
                  num+=code.shift()!
                 if(isNum(code[0]) && isNum(code[1])){
-                  code.shift()!
-                  code.shift()!
+                  num += code.shift()! + code.shift()!
                   tokens.push(makeToken(TokenType.Date, num))
                 }
             }
             else if(code[0] == "."){
                 num += code.shift()!
+                tokens.push(makeToken(TokenType.Number, num))
             }
           }  
-            tokens.push(makeToken(TokenType.Number, num))
+            
         }
         else if (isAlpha(code[0])){
-          let ident = " ";
+          let ident = "";
           while (code.length > 0 && isAlpha(code[0])!){
             ident += code.shift();
           }
           const key = KEYWORDS[ident];
+
           if ( key == undefined){
             tokens.push(makeToken(TokenType.Identifier, ident))
           }
-          else {
+          else{
             tokens.push(makeToken(key, ident))
-          }
         }
+      }
         else if (isSkippable(code[0])){
             code.shift()!
             continue
@@ -119,9 +121,5 @@ export function tokenizer(src: string): Token[]{
  return tokens
 
 }
-  
-
-
-const test = fs.readFileSync("test.txt")
-const written = JSON.stringify(test, null, 2)
-console.log(tokenizer(written))
+const test = fs.readFileSync("test.txt","utf-8");
+console.log(tokenizer(test))
