@@ -1,0 +1,3 @@
+ACCOUNTS { 
+    Cash: asset
+    }

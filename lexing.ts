@@ -37,7 +37,7 @@ function isAlpha(src: string):boolean{
 function isNum(src: string){
     const c = src.charCodeAt(0)
     const bound = ["0".charCodeAt(0),"9".charCodeAt(0)]
-    return [c >= bound[0] && c <= bound[1]]
+    return c >= bound[0] && c <= bound[1]
 }
 
 function isSkippable(src:string){
@@ -55,8 +55,7 @@ export function tokenizer(src: string): Token[]{
     if(code[0] == ":"){
      tokens.push(makeToken(TokenType.Colon, code.shift()! ))
     }
-    else if (code[0] == "-" && code[1] == ">" || code[0] == "<" && code[1] == "-" ){
-        code.shift()!
+    else if ((code[0] == "-" && code[1] == ">") || (code[0] == "<" && code[1] == "-" )){
         tokens.push(makeToken(TokenType.Flow_Movement, code.shift()!))
     }
     else if(code[0] == "{"){
@@ -70,7 +69,7 @@ export function tokenizer(src: string): Token[]{
     }
     else if(code[0] == "'" || code[0] == '"'){
         let quoteType = code.shift()!;
-        let str = " ";
+        let str = "";
         while(code.length > 0 && code[0] !== quoteType ){
             str += code.shift()! ;
         }
@@ -79,25 +78,23 @@ export function tokenizer(src: string): Token[]{
     }
     else {
         if(isNum(code[0])){
-          let num = " "
-          let date = " "
+          let num = ""
+          
           while (code.length > 0 && isNum(code[0])!){
             num += code.shift()!
-            if(code[0] == "-"){
-                 date = num
+            if( num.length == 4 && code[0] == "-"  ){
+                 num+=code.shift()!
+                if(isNum(code[0]) && isNum(code[1])){
+                  code.shift()!
+                  code.shift()!
+                  tokens.push(makeToken(TokenType.Date, num))
+                }
             }
-            else if(code[0] == ","){
+            else if(code[0] == "."){
                 num += code.shift()!
             }
-          }
-          if (date == num){
-            tokens.push(makeToken(TokenType.Date, date))
-            
-          }
-          else {
+          }  
             tokens.push(makeToken(TokenType.Number, num))
-            
-          }
         }
         else if (isAlpha(code[0])){
           let ident = " ";
@@ -114,10 +111,15 @@ export function tokenizer(src: string): Token[]{
         }
         else if (isSkippable(code[0])){
             code.shift()!
+            continue
         }
     }
 }
  return tokens
 
 }
-        
+  
+
+
+const test = 
+console.log(tokenizer("ACCOUNTS { Cash: asset}"))
