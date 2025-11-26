@@ -14,7 +14,8 @@ export enum TokenType {
     REPORT,
     BinaryOp,
     Flow_Movement,
-    Colon
+    Colon,
+    EOF
 }
 
 export interface Token {
@@ -66,9 +67,19 @@ export function tokenizer(src: string): Token[]{
     else if(code[0] == "}"){
         tokens.push(makeToken(TokenType.CloseBrace, code.shift()!))
     }
-    else if (code[0] == "+" || code[0] == "-"){
-       tokens.push(makeToken(TokenType.BinaryOp,code.shift()!))
+    else if (code[0] == "+" || code[0] == "-") {
+  if (code[0] == "-" &&isNum(code[1])) {
+    let num = code.shift()!; // consume '-'
+    while (code.length > 0 && isNum(code[0])) {
+      num += code.shift()!
     }
+    tokens.push(makeToken(TokenType.Number, num));
+    continue; // Prevent falling through and infinite loop
+  } else {
+    tokens.push(makeToken(TokenType.BinaryOp, code.shift()!));
+    continue; // Always advance and prevent infinite loop
+  }
+}
     else if(code[0] == "'" || code[0] == '"'){
         let quoteType = code.shift()!;
         let str = "";
@@ -79,11 +90,19 @@ export function tokenizer(src: string): Token[]{
         tokens.push(makeToken(TokenType.String, str))
     }
     else {
-        if(isNum(code[0])){
+        if (isNum(code[0])){
           let num = "";
           let hasDot = false;
+          
           // Check for date (YYYY-MM-DD)
-          if (code.length >= 10 && isNum(code[0]) && isNum(code[1]) && isNum(code[2]) && isNum(code[3]) && code[4] == '-' && isNum(code[5]) && isNum(code[6]) && code[7] == '-' && isNum(code[8]) && isNum(code[9])) {
+          
+          if (
+          code.length >= 10 && 
+          isNum(code[0]) && isNum(code[1]) && 
+          isNum(code[2]) && isNum(code[3]) && code[4] == '-' && 
+          isNum(code[5]) && isNum(code[6]) && code[7] == '-' && 
+          isNum(code[8]) && isNum(code[9])) {
+            
             num = code.splice(0,10).join("");
             tokens.push(makeToken(TokenType.Date, num));
           } else {
@@ -95,8 +114,8 @@ export function tokenizer(src: string): Token[]{
             }
             tokens.push(makeToken(TokenType.Number, num));
           }
-        }
-        else if (isAlpha(code[0])){
+        
+         if (isAlpha(code[0])){
           let ident = "";
           while (code.length > 0 && isAlpha(code[0])!){
             ident += code.shift();
@@ -113,11 +132,15 @@ export function tokenizer(src: string): Token[]{
         else if (isSkippable(code[0])){
             code.shift()!
             continue
-        }
+      }
+      
     }
+  }
 }
+ tokens.push({type: TokenType.EOF, value: "End of file"})
  return tokens
 }
+
 
 const test = fs.readFileSync("test.txt","utf-8");
 console.log(tokenizer(test))

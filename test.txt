@@ -7,3 +7,14 @@
     OwnerCapital -7000.00
     RetainedEarnings -9500.00
   }
+
+  JOURNAL {
+  TXN 2024-10-01 "Sale (principal)" {
+      CreditsClients -> SalesRevenue   70010.00
+      CreditsClients -> VATDebit       15402.20
+  }
+
+  TXN 2024-10-01 "Payment (principal)" {
+      Cash -> CreditsClients 85412.20
+  }
+}
