@@ -1,4 +1,4 @@
-import { AccountBlock, OpeningBlock, Program, Stat } from "./ast";
+import { AccountBlock, OpeningBlock, Program, Stat, JournalBlock, Transaction,  } from "./ast";
 import { Token, tokenizer, TokenType } from "./lexing";
 
 export default class Parser {
@@ -16,12 +16,11 @@ export default class Parser {
         return prev
     }
 
-    private expect(token: TokenType, message: string):boolean{
-        if(this.peek().type !== token){
-            console.log(message)
-            return false
+    private expect(token: TokenType, message: string){
+        if (!this.match(token)){
+          throw new Error(message)
         }
-        else return true
+        return this.advance()
     }
   
     private match(token: TokenType):boolean{
@@ -56,26 +55,25 @@ export default class Parser {
         this.tokens = tokens;
         this.position = 0;
         const body : Stat[] = [];
-        while(!this.is_eof()){
+        while(!this.is_eof() && this.tokens.length > 0){
             if (this.match(TokenType.ACCOUNTS)){
                 const AccountBlock = this.parseAccountBlock();
                 body.push(AccountBlock)
             }
-            if(this.match(TokenType.Opening)){
+            else if(this.match(TokenType.Opening)){
                 const OpeningBlock = this.parseOpeningBlock();
                 body.push(OpeningBlock)
             }
-            if(this.match(TokenType.JOURNAL)){
+            else if(this.match(TokenType.JOURNAL)){
                 const JournalBlock = this.parseJournalBlock();
                 body.push(JournalBlock)
             }
-            if(this.match(TokenType.Transaction)){
-                const Transaction = this.parseTransaction();
-                body.push(Transaction)
+            else {
+                throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` )
             }
-
+            this.position++
         }
-        return {type: "program",value: body} as Program
+        return {type: "program", value: body} as Program
 
     }
 }
