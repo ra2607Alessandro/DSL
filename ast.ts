@@ -25,7 +25,7 @@ export interface OpeningBlock extends Stat {
 
 export interface JournalBlock extends Stat {
     type: "JournalBlock",
-    txn: Transaction[]
+    txns: Transaction[]
 }
 
 export interface Transaction extends Stat {

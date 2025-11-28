@@ -64,6 +64,19 @@ export default class Parser {
     } 
 
     private parseJournalBlock(): JournalBlock{
+        this.expect(TokenType.JOURNAL, "Expected 'JOURNAL'");
+        this.expect(TokenType.OpenBrace, "Expected '{'");
+        const txns = new Array<Transaction>();
+        while(this.peek().type !== TokenType.CloseBrace){
+            if(this.match(TokenType.Transaction)){
+            const txn = this.parseTransaction();
+            txns.push(txn)
+            }
+            else {
+                throw new Error("Expected a Transaction")
+            }
+        }
+        return {type: "JournalBlock", txns: txns} as JournalBlock
 
     }
     private parseTransaction(): Transaction{
