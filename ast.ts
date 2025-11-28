@@ -15,13 +15,13 @@ export interface Program {
 
 export interface AccountBlock extends Stat {
     type: "AccountBlock",
-    accounts: Map<string, Account_Types>
+    accounts: Record<string, Account_Types>
 }
 
 export interface OpeningBlock extends Stat {
     type: "OpeningBlock",
     date: string,
-    balances: Map<string, number>
+    balances: Record<string, number>
 }
 
 export interface JournalBlock extends Stat {

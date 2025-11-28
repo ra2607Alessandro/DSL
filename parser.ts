@@ -1,5 +1,6 @@
 import { AccountBlock, OpeningBlock, Program, Stat, JournalBlock, Transaction, Account_Types, Movement } from "./ast";
 import { Token, tokenizer, TokenType } from "./lexing";
+import fs = require('fs');
 
 export default class Parser {
     private tokens: Token[] = [];
@@ -39,12 +40,12 @@ export default class Parser {
     private parseAccountBlock(): AccountBlock{
         this.advance();
         this.expect(TokenType.OpenBrace, "Accounts have to start with an '{'")
-        const accounts = new Map<string, Account_Types>() 
+        const accounts : Record<string, Account_Types> = {}
         while(this.peek().type !== TokenType.CloseBrace ){
             const name = this.expect(TokenType.Identifier, "Every account needs to be named");
             this.expect(TokenType.Colon, "Expected character: ':'");
             const type = this.expect(TokenType.Account_Types, "Expected character: Account type (i.e. : revenue, expense, liability, asset ...)" )
-            accounts.set(name.value,type.value)
+            accounts[name.value] = type.value
         }
         this.expect(TokenType.CloseBrace, "Expected '}'")
         return {type: "AccountBlock", accounts: accounts} as AccountBlock
@@ -54,11 +55,11 @@ export default class Parser {
         this.advance();
         const date = this.expect(TokenType.Date, "Expected a Date type").value;
         this.expect(TokenType.OpenBrace, "Expected '{'");
-        const balances = new Map<string, number>();
+        const balances : Record<string, number> = {};
         while(this.peek().type !== TokenType.CloseBrace){
             const name = this.expect(TokenType.Identifier, "Expected an Identifier").value;
             const number = parseFloat(this.expect(TokenType.Number, "Expected a Number").value);
-            balances.set(name,number)
+            balances[name.value] = number
         }
         this.expect(TokenType.CloseBrace, "Expected '}'")
         return {type: "OpeningBlock", date: date, balances: balances} as OpeningBlock
@@ -130,3 +131,8 @@ export default class Parser {
 
     }
 }
+
+const parser = new Parser();
+const test = fs.readFileSync("test.txt", "utf-8");
+const t = parser.ProduceAst(test);
+console.log(JSON.stringify(t, null, 2));
