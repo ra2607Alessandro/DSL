@@ -57,9 +57,10 @@ export default class Parser {
         const balances = new Map<string, number>();
         while(this.peek().type !== TokenType.CloseBrace){
             const name = this.expect(TokenType.Identifier, "Expected an Identifier").value;
-            const number = this.expect(TokenType.Number, "Expected a Number").value;
+            const number = parseFloat(this.expect(TokenType.Number, "Expected a Number").value);
             balances.set(name,number)
         }
+        this.expect(TokenType.CloseBrace, "Expected '}'")
         return {type: "OpeningBlock", date: date, balances: balances} as OpeningBlock
     } 
 
@@ -76,6 +77,7 @@ export default class Parser {
                 throw new Error("Expected a Transaction")
             }
         }
+        this.expect(TokenType.CloseBrace, "Expected '}'")
         return {type: "JournalBlock", txns: txns} as JournalBlock
 
     }
@@ -89,6 +91,7 @@ export default class Parser {
             const movement = this.parseMovement();
             flow.push(movement)
         }
+        this.expect(TokenType.CloseBrace, "Expected '}'")
         return {type: "Transaction", date: date.value, name: name.value, flow: flow} as Transaction
     }
 
@@ -96,8 +99,8 @@ export default class Parser {
         const nameI = this.expect(TokenType.Identifier, "Expected Identifier to name the account");
         const flow = this.expect(TokenType.Flow_Movement, "Expected flow movement sign (i.e. : ->, <-)");
         const nameII = this.expect(TokenType.Identifier, "Expected Identifier to name the account");
-        const amount = this.expect(TokenType.Number, "Expected number amount $$");
-        return {type: "Movement",account1: nameI.value, flow: flow.type, account2: nameII.value, amount: amount.value } as Movement
+        const amount = parseFloat(this.expect(TokenType.Number, "Expected number amount $$").value);
+        return {type: "Movement",account1: nameI.value, flow: flow.value, account2: nameII.value, amount: amount } as Movement
 
     }
     
@@ -121,7 +124,7 @@ export default class Parser {
             else {
                 throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` )
             }
-            this.position++
+            
         }
         return {type: "program", value: body} as Program
 
