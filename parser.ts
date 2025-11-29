@@ -132,7 +132,8 @@ export default class Parser {
     }
 }
 
-const parser = new Parser();
-const test = fs.readFileSync("test.txt", "utf-8");
-const t = parser.ProduceAst(test);
-console.log(JSON.stringify(t, null, 2));
+
+//const parser = new Parser();
+//const test = fs.readFileSync("test.txt", "utf-8");
+//const t = parser.ProduceAst(test);
+//console.log(JSON.stringify(t, null, 2));

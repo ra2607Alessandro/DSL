@@ -165,5 +165,5 @@ export function tokenizer(src: string): Token[]{
 }
 
 
-const test = fs.readFileSync("test.txt","utf-8");
-console.log(tokenizer(test))
+//const test = fs.readFileSync("test.txt","utf-8");
+//console.log(tokenizer(test))
