@@ -1,10 +1,17 @@
-import { Program } from "./ast"; 
+import { AccountBlock, Program } from "./ast"; 
 import { AccountMetaData } from "./ds";
 
 
 class Interpreter {
-   private account_registry():AccountMetaData{
-      
+   private account_registry(type: AccountBlock):AccountMetaData{
+      if(type.type !== "AccountBlock"){
+        throw new Error(`The required type is: 'AccountBlock', yours is:${console.log(type.type)}`)
+      }
+      const account : AccountMetaData[] = []
+      if(type.accounts){
+
+        
+      }
    }
 
 
@@ -14,7 +21,7 @@ class Interpreter {
         switch(types.type){
 
             case "AccountBlock":
-                return this.account_registry()
+                return this.account_registry(types as AccountBlock)
         }
       }
    }
