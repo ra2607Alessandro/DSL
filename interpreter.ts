@@ -1,8 +1,9 @@
 import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction } from "./ast"; 
 import { AccountMetaData, Posting } from "./ds";
+import Parser from "./parser"
+import fs = require('fs');
 
-
-class Interpreter {
+export default class Interpreter {
    private accountRegistry : Record<string, AccountMetaData> = {};
    private ledger : Record<string, Posting[]> = {};
    private txnCounter = 0
@@ -131,3 +132,10 @@ class Interpreter {
       }
    }
 }
+
+const int = new Interpreter();
+const parser = new Parser();
+const test = fs.readFileSync("test.txt", "utf-8");
+const t = parser.ProduceAst(test);
+console.log(JSON.stringify(int.Interpret(t), null, 2));
+
