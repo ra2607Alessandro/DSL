@@ -121,6 +121,9 @@ export default class Interpreter {
             case "OpeningBlock":
                 this.process_opening_blocks(block as OpeningBlock);
                 break
+            default:
+                throw new Error("The block type has not been recognized")
+                
         }
       }
    }
@@ -130,5 +133,6 @@ const int = new Interpreter();
 const parser = new Parser();
 const test = fs.readFileSync("test.txt", "utf-8");
 const t = parser.ProduceAst(test);
-console.log(JSON.stringify(int.Interpret(t), null, 2));
+const result = int.Interpret(t)
+console.log(JSON.stringify(result, null, 2));
 
