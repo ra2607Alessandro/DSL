@@ -104,7 +104,6 @@ export default class Interpreter {
 
    private process_opening_blocks(block: OpeningBlock){
      let ID : string = `OPEN-${String(this.txnCounter)}`
-
    }
 
    public Interpret(program: Program){
@@ -144,9 +143,11 @@ export default class Interpreter {
     let balance = 0;
 
     for(const posting of this.ledger[account_name]){
-        
+        const amount = 
         if(posting.side === "credit"){
             balance += posting.amount
+            
+
         }
         
         if(posting.side === "debit"){
