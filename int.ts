@@ -172,5 +172,9 @@ console.log("=====================")
 console.log("Ledger:")
 console.log("=====================")
 console.log(JSON.stringify(int.get_ledger(), null, 2))
+console.log("Balance for SalesRevenue")
+console.log("=====================")
+console.log(JSON.stringify(int.get_balance("SalesRevenue"),null,2))
+
 
 
