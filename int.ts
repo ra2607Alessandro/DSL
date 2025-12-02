@@ -63,13 +63,13 @@ export default class Interpreter {
              postings =  [
             { 
                 account: movement.account1,
-                side: "credit",
+                side: "debit",
                 amount: movement.amount,
                 ID, date, description 
             } as Posting ,
             {
                 account: movement.account2,
-                side: "debit",
+                side: "credit",
                 amount: movement.amount,
                 ID,date,description
             } as Posting]
@@ -77,13 +77,13 @@ export default class Interpreter {
         else if(movement.flow == "<-"){
             postings  = [{ 
                 account: movement.account2,
-                side: "credit",
+                side: "debit",
                 amount: movement.amount,
                 ID, date, description 
             } as Posting  ,
             {
                 account: movement.account1,
-                side: "debit",
+                side: "credit",
                 amount: movement.amount,
                 ID,date,description
             } as Posting]

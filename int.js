@@ -56,7 +56,7 @@ var Interpreter = /** @class */ (function () {
             postings = [
                 {
                     account: movement.account1,
-                    side: "credit",
+                    side: "debit",
                     amount: movement.amount,
                     ID: ID,
                     date: date,
@@ -64,7 +64,7 @@ var Interpreter = /** @class */ (function () {
                 },
                 {
                     account: movement.account2,
-                    side: "debit",
+                    side: "credit",
                     amount: movement.amount,
                     ID: ID,
                     date: date,
@@ -75,7 +75,7 @@ var Interpreter = /** @class */ (function () {
         else if (movement.flow == "<-") {
             postings = [{
                     account: movement.account2,
-                    side: "credit",
+                    side: "debit",
                     amount: movement.amount,
                     ID: ID,
                     date: date,
@@ -83,7 +83,7 @@ var Interpreter = /** @class */ (function () {
                 },
                 {
                     account: movement.account1,
-                    side: "debit",
+                    side: "credit",
                     amount: movement.amount,
                     ID: ID,
                     date: date,
@@ -144,13 +144,6 @@ var Interpreter = /** @class */ (function () {
         }
         return balance;
     };
-    Interpreter.prototype.get_results = function () {
-        var ar = this.get_account_registry();
-        var lg = this.get_ledger();
-        return [console.log("Account Registry:"), ar,
-            console.log("Ledger:"), lg
-        ];
-    };
     return Interpreter;
 }());
 exports.default = Interpreter;
@@ -159,4 +152,7 @@ var parser = new parser_1.default();
 var test = fs.readFileSync("test.txt", "utf-8");
 var t = parser.ProduceAst(test);
 int.Interpret(t);
-console.log(JSON.stringify(int.get_results(), null, 2));
+console.log("Account Registry:");
+console.log(JSON.stringify(int.get_account_registry(), null, 2));
+console.log("Ledger:");
+console.log(JSON.stringify(int.get_ledger(), null, 2));

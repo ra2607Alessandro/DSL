@@ -15,6 +15,7 @@
   }
 
   TXN 2024-10-01 "Payment (principal)" {
-      Cash -> CreditsClients 85412.20
+      SalesRevenue -> Cash 70010.00
+      VATDebit -> VATDebit 15402.20
   }
 }
