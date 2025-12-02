@@ -166,8 +166,11 @@ const test = fs.readFileSync("test.txt", "utf-8");
 const t = parser.ProduceAst(test);
 int.Interpret(t)
 console.log("Account Registry:")
+console.log("=====================")
 console.log(JSON.stringify(int.get_account_registry(), null, 2));
+console.log("=====================")
 console.log("Ledger:")
+console.log("=====================")
 console.log(JSON.stringify(int.get_ledger(), null, 2))
 
 

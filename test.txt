@@ -1,3 +1,14 @@
+ ACCOUNTS {
+    Cash: asset
+    AccountsReceivable: asset
+    Inventory: asset
+    Loan: liability
+    OwnerCapital: equity
+    RetainedEarnings: equity
+    CreditsClients: asset
+    SalesRevenue: revenue
+    VATDebit: asset
+}
 
   OPEN 2024-01-01 {
     Cash 10000.00
@@ -16,6 +27,6 @@
 
   TXN 2024-10-01 "Payment (principal)" {
       SalesRevenue -> Cash 70010.00
-      VATDebit -> VATDebit 15402.20
+      VATDebit -> Cash 15402.20
   }
 }
