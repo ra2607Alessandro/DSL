@@ -6,8 +6,8 @@ import fs = require('fs');
 
 export default class Interpreter {
    private accountRegistry : Record<string, AccountMetaData> = {};
-   private ledger : Record<string, Posting[]> = {};
-   private openings : Record<string,Posting[]> = {};
+   private ledger : Record<string, Posting[]> = {} ;
+   private openings : Record<string,Posting> = {} ;
    private txnCounter = 0;
 
    private process_account_blocks(block: AccountBlock){
@@ -106,14 +106,15 @@ export default class Interpreter {
    }
 
    private process_opening_blocks(block: OpeningBlock){
+
      let ID : string = `OPEN-${String(this.txnCounter)}`;
      let amount = 0;
-     const postings = new Array<Posting>()
+     const postings :  Record<string,Posting> = {}
      
      for ( const account in block.balances){
         amount = block.balances[account];
         if( amount < 0 ){
-            postings.push({ 
+            postings[account] = ({ 
                 account: account,
                 side: "debit",
                 amount: amount,
@@ -125,7 +126,7 @@ export default class Interpreter {
 
         else if (amount > 0) {
             {
-                postings.push({ 
+                postings[account] = ({ 
                 account: account,
                 side: "credit",
                 amount: amount,
@@ -135,7 +136,9 @@ export default class Interpreter {
                } as Posting)
            }
           }
-          this.openings[account] = postings
+         
+         this.openings[account] = postings[account]
+
          }
         }
 
@@ -168,7 +171,7 @@ export default class Interpreter {
     return this.ledger
    }
    
-   public get_openings(): Record<string, Posting[]>{
+   public get_openings(): Record<string, Posting>{
     return this.openings
    }
 
@@ -180,10 +183,9 @@ export default class Interpreter {
     let balance = 0;
 
     for(const posting of this.ledger[account_name]){ 
-
         
-       for(const opening_posting of this.openings[account_name]){
-
+       for(const opening_name in this.openings[account_name]){
+        let opening_posting = this.openings[opening_name];
         if (opening_posting.account == account_name && opening_posting.amount){
           balance = opening_posting.amount
         }
