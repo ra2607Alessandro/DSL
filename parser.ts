@@ -112,7 +112,7 @@ export default class Parser {
         while(!this.is_eof() && this.tokens.length > 0){
             if (this.match(TokenType.ACCOUNTS)){
                 const AccountBlock = this.parseAccountBlock();
-                body.push(AccountBlock)
+                body.push(AccountBlock);
             }
             else if(this.match(TokenType.Opening)){
                 const OpeningBlock = this.parseOpeningBlock();
@@ -120,10 +120,10 @@ export default class Parser {
             }
             else if(this.match(TokenType.JOURNAL)){
                 const JournalBlock = this.parseJournalBlock();
-                body.push(JournalBlock)
+                body.push(JournalBlock);
             }
             else {
-                throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` )
+                throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` );
             }
             
         }

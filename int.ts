@@ -202,6 +202,6 @@ console.log(JSON.stringify(int.get_ledger(), null, 2));
 console.log("Openings Registry");
 console.log("=====================");
 console.log(JSON.stringify(int.get_openings(), null, 2));
-console.log("Balance for VatDebit");
+console.log("Balance for Cash");
 console.log("=====================");
-console.log(JSON.stringify(int.get_balance("VATDebit"),null,2));
+console.log(JSON.stringify(int.get_balance("Cash"),null,2));

@@ -22,7 +22,7 @@
   JOURNAL {
   TXN 2024-10-01 "Sale (principal)" {
       CreditsClients -> SalesRevenue   70010.00
-      CreditsClients -> VATDebit       15402.20
+      CreditsClients -> VATDebit       -15402.20
   }
 
   TXN 2024-10-01 "Payment (principal)" {
