@@ -75,20 +75,7 @@ export default class Interpreter {
                 ID,date,description
             } as Posting]
         }
-        else if(movement.flow == "<-"){
-            postings  = [{ 
-                account: movement.account2,
-                side: "debit",
-                amount: movement.amount,
-                ID, date, description 
-            } as Posting  ,
-            {
-                account: movement.account1,
-                side: "credit",
-                amount: movement.amount,
-                ID,date,description
-            } as Posting]
-        }
+        
         return postings
         
    }

@@ -80,7 +80,7 @@ export function tokenizer(src: string): Token[]{
     if(code[0] == ":"){
      tokens.push(makeToken(TokenType.Colon, code.shift()! ))
     }
-    else if ((code[0] == "-" && code[1] == ">") || (code[0] == "<" && code[1] == "-" )){
+    else if ((code[0] == "-" && code[1] == ">") ){
       const pointer = code.shift()! + code.shift()!
         tokens.push(makeToken(TokenType.Flow_Movement, pointer))
     }

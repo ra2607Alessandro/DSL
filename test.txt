@@ -27,6 +27,6 @@
 
   TXN 2024-10-01 "Payment (principal)" {
       SalesRevenue -> Cash 70010.00
-      VATDebit <- Cash 15402.20
+      Cash -> VATDebit 15402.20
   }
 }
