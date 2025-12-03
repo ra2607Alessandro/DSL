@@ -186,7 +186,7 @@ export default class Interpreter {
         
        for(const opening_name in this.openings[account_name]){
         let opening_posting = this.openings[opening_name];
-        if (opening_posting.account == account_name && opening_posting.amount){
+        if (opening_posting.amount){
           balance = opening_posting.amount
         }
 
