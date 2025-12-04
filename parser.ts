@@ -98,22 +98,25 @@ export default class Parser {
    
 
     private parseAccounts():Account[]{
+       const accounts = new Array<Account>()
        while(!this.match(TokenType.CloseBrace)){
-       if(this.peek().type == "Account") 
+       if(this.peek().value == "string"){
+          accounts.push({type: "Account", value: this.peek().value} as Account)
+       } 
        }
+       return accounts
 
     }
     private parseReport(): ReportBlock {
         this.expect(TokenType.REPORT, "Expected: 'REPORT'");
         this.expect(TokenType.Colon, "Expected: ':' ")
         this.expect(TokenType.OpenBrace, "Expected: '{'");
-        const accounts = new Array<TokenType.Identifier>()
+        const accounts = new Array<Account>()
         while(!this.match(TokenType.CloseBrace)){
-            
-
-
+            accounts.push(...this.parseAccounts())
         }
         this.expect(TokenType.CloseBrace, "Expected: '}")
+        return {type: "Report", accounts: accounts} as ReportBlock
     }
 
 
@@ -160,6 +163,10 @@ export default class Parser {
             else if(this.match(TokenType.Closing)){
                 const ClosingBlock = this.parseClosingBlock();
                 body.push(ClosingBlock)
+            }
+            else if(this.match(TokenType.REPORT)){
+                const ReportBlock = this.parseReport();
+                body.push(ReportBlock)
             }
             else {
                 throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` );
