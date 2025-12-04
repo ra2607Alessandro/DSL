@@ -160,7 +160,8 @@ export default class Interpreter {
                 date: block.date,
                 description: `Closing ${source} to ${target}`
             };
-        } else {
+        } 
+        else if (amount < 0) {
             postingSource = {
                 account: source,
                 side: "credit",

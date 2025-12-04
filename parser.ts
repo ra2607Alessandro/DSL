@@ -1,4 +1,4 @@
-import { AccountBlock, OpeningBlock, Program, Stat, JournalBlock, Transaction, Account_Types, Movement, CloseBlock, ReportBlock } from "./ast";
+import { AccountBlock, OpeningBlock, Program, Stat, JournalBlock, Transaction, Account_Types, Movement, CloseBlock, ReportBlock, Account } from "./ast";
 import { Token, tokenizer, TokenType } from "./lexing";
 import fs = require('fs');
 
@@ -96,10 +96,24 @@ export default class Parser {
         return {type: "CloseBlock", date: date, movements: movements} as CloseBlock
     }
    
+
+    private parseAccounts():Account[]{
+       while(!this.match(TokenType.CloseBrace)){
+       if(this.peek().type == "Account") 
+       }
+
+    }
     private parseReport(): ReportBlock {
-        this.expect(TokenType.REPORT, "Expect 'REPORT'");
-        this.expect(TokenType.Colon, "Expected ':' ")
-        
+        this.expect(TokenType.REPORT, "Expected: 'REPORT'");
+        this.expect(TokenType.Colon, "Expected: ':' ")
+        this.expect(TokenType.OpenBrace, "Expected: '{'");
+        const accounts = new Array<TokenType.Identifier>()
+        while(!this.match(TokenType.CloseBrace)){
+            
+
+
+        }
+        this.expect(TokenType.CloseBrace, "Expected: '}")
     }
 
 

@@ -1,6 +1,6 @@
 import { TokenType } from "./lexing"
 
-export type NodeType = "identifier"|"program" | "AccountBlock" | "Report" |"CloseBlock" |"OpeningBlock"| "Movement" | "JournalBlock" | "CloseBlock" | "ReportBlock" | "Transaction"
+export type NodeType = "Account"|"program" | "AccountBlock" | "Report" |"CloseBlock" |"OpeningBlock"| "Movement" | "JournalBlock" | "CloseBlock" | "ReportBlock" | "Transaction"
 export type Account_Types = "asset" | "liability" | "revenue" | "expense" | "equity" | "unknown"
 export type Flow_Movement = "->" | "<-"
 
@@ -11,6 +11,11 @@ export interface Stat{
 export interface Program {
    type: "program",
    value: Stat[] 
+}
+
+export interface Account extends Stat {
+    type: "Account"
+    value: string
 }
 
 export interface AccountBlock extends Stat {
