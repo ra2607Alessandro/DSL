@@ -1,5 +1,5 @@
 import { Runtime } from "inspector/promises";
-import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction } from "./ast"; 
+import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction, CloseBlock } from "./ast"; 
 import { AccountMetaData, Posting } from "./ds";
 import Parser from "./parser"
 import fs = require('fs');
@@ -129,6 +129,16 @@ export default class Interpreter {
          }
         }
 
+   private process_close_block(block: CloseBlock, account_name: string){
+       for (const move of block.movements){
+        const balance = this.get_balance(move.account1);
+        const type = this.get_account_registry(account_name).type;
+        const side = this.get_ledger(account_name).side;
+        
+
+       }
+   }
+
    public Interpret(program: Program){
       for(const block of program.value){
 
@@ -143,6 +153,7 @@ export default class Interpreter {
             case "OpeningBlock":
                 this.process_opening_blocks(block as OpeningBlock);
                 break
+           
             default:
                 throw new Error("The block type has not been recognized")
                 
@@ -150,11 +161,19 @@ export default class Interpreter {
       }
    }
 
-   public get_account_registry(): Record<string, AccountMetaData>{
+   public get_account_registry(account_name?: string): Record<string, AccountMetaData>{
+    if(account_name){
+        const md = this.accountRegistry[account_name];
+        return {md}
+    }
     return this.accountRegistry
    }
 
-   public get_ledger(): Record<string, Posting[]>{
+   public get_ledger(account_name?: string): Record<string, Posting[]>{
+    if (account_name){
+        const posting = this.ledger[account_name];
+        return {posting}
+    }
     return this.ledger
    }
    
