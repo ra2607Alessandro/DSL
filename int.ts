@@ -129,14 +129,29 @@ export default class Interpreter {
          }
         }
 
-   private process_close_block(block: CloseBlock, account_name: string){
-       for (const move of block.movements){
-        const balance = this.get_balance(move.account1);
-        const type = this.get_account_registry(account_name).type;
-        const side = this.get_ledger(account_name).side;
-        
+   private process_close_block(block: CloseBlock){
+    let ID : string = `OPEN-${String(this.txnCounter)}`;
+    let balance = 0;
+    let postings : Posting[] = []
 
+    for (const move of block.movements){
+          let account = move.account1 || move.account2
+          if (move.amount > 0){
+            account = move.account1
+            balance = this.get_balance(account);
+          }
+          else if (move.amount < 0){
+            account = move.account2
+            balance = this.get_balance(account);
+          }
+         let description = `closing ${move.account1} and ${move.account2}`
+          postings.push(...this.convert_movement_into_postings(move,block.date, ID, description)) 
+         this.ledger[account] = postings ; 
        }
+       
+
+    
+
    }
 
    public Interpret(program: Program){
