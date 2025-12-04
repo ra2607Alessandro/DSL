@@ -37,6 +37,7 @@ export interface JournalBlock extends Stat {
 
 export interface ReportBlock extends Stat {
     type: "Report",
+    blocks: Stat[]
     
 }
 

@@ -95,11 +95,13 @@ export default class Parser {
         this.expect(TokenType.CloseBrace, "Expected: '}'");
         return {type: "CloseBlock", date: date, movements: movements} as CloseBlock
     }
-
-    private parseReportBlock():ReportBlock {
-        this.expect(TokenType.REPORT, "Expected: 'REPORT' ");
+   
+    private parseReport(): ReportBlock {
+        this.expect(TokenType.REPORT, "Expect 'REPORT'");
+        this.expect(TokenType.Colon, "Expected ':' ")
         
     }
+
 
     private parseTransaction(): Transaction{
         this.expect(TokenType.Transaction,"Expected 'TXN'");
@@ -144,10 +146,6 @@ export default class Parser {
             else if(this.match(TokenType.Closing)){
                 const ClosingBlock = this.parseClosingBlock();
                 body.push(ClosingBlock)
-            }
-            else if(this.match(TokenType.REPORT)){
-                const ReportBlock = this.parseReportBlock();
-                body.push(ReportBlock)
             }
             else {
                 throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` );
