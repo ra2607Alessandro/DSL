@@ -130,24 +130,66 @@ export default class Interpreter {
         }
 
    private process_close_block(block: CloseBlock){
-    let ID : string = `OPEN-${String(this.txnCounter)}`;
-    let balance = 0;
-    let postings : Posting[] = []
+    // For each movement, transfer the full balance from source to target
+    for (const move of block.movements) {
+        const source = move.account1;
+        const target = move.account2;
+        const amount = this.get_balance(source);
+        // If the balance is zero, nothing to close
+        if (Math.abs(amount) < 0.01) continue
 
-    for (const move of block.movements){
-          let account = move.account1 || move.account2
-          if (move.amount > 0){
-            account = move.account1
-            balance = this.get_balance(account);
-          }
-          else if (move.amount < 0){
-            account = move.account2
-            balance = this.get_balance(account);
-          }
-         let description = `closing ${move.account1} and ${move.account2}`
-          postings.push(...this.convert_movement_into_postings(move,block.date, ID, description)) 
-         this.ledger[account] = postings ; 
-       }
+        // Determine posting sides based on amount sign
+        // If amount > 0, debit source, credit target
+        // If amount < 0, credit source, debit target
+        let postingSource = {} as Posting
+        let  postingTarget = {} as Posting;
+        if (amount > 0) {
+            postingSource = {
+                account: source,
+                side: "debit",
+                amount: amount,
+                ID: `CLOSE-${block.date}`,
+                date: block.date,
+                description: `Closing ${source} to ${target}`
+            } ;
+            postingTarget = {
+                account: target,
+                side: "credit",
+                amount: amount,
+                ID: `CLOSE-${block.date}`,
+                date: block.date,
+                description: `Closing ${source} to ${target}`
+            };
+        } else {
+            postingSource = {
+                account: source,
+                side: "credit",
+                amount: Math.abs(amount),
+                ID: `CLOSE-${block.date}`,
+                date: block.date,
+                description: `Closing ${source} to ${target}`
+            };
+            postingTarget = {
+                account: target,
+                side: "debit",
+                amount: Math.abs(amount),
+                ID: `CLOSE-${block.date}`,
+                date: block.date,
+                description: `Closing ${source} to ${target}`
+            };
+        }
+        // Append postings to ledger
+        if (!this.ledger[source]){
+            
+            this.ledger[source] = [];
+        }
+        if (!this.ledger[target]) {
+            this.ledger[target] = [];
+
+        }
+        this.ledger[source].push(postingSource);
+        this.ledger[target].push(postingTarget);
+    }
        
 
     
