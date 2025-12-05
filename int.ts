@@ -1,5 +1,5 @@
 import { Runtime } from "inspector/promises";
-import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction, CloseBlock, ReportBlock } from "./ast"; 
+import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction, CloseBlock, ReportBlock, Account } from "./ast"; 
 import { AccountMetaData, Posting } from "./ds";
 import Parser from "./parser"
 import fs = require('fs');
@@ -195,15 +195,22 @@ export default class Interpreter {
    }
 
    private process_report_block(block: ReportBlock){
+    const report = new Array<number>();
     for(const account of block.accounts){
         if(account == "ALL"){
-            for (const account_name in this.accountRegistry)
-            return this.get_balance(account_name)
+            for (const account_name in this.accountRegistry){
+             report.push(this.get_balance(account_name))
+            }
         }
         else {
-            
+            if(this.get_account_registry((account as Account).value)){
+               report.push(this.get_balance((account as Account).value))
+            }       
         }
     }
+
+    return report
+
    }
 
    public Interpret(program: Program){
