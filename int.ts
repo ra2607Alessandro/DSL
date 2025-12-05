@@ -195,15 +195,18 @@ export default class Interpreter {
    }
 
    private process_report_block(block: ReportBlock){
-    const report = new Array<number>();
+    const report = new Array<any>();
     for(const account of block.accounts){
         if(account == "ALL"){
             for (const account_name in this.accountRegistry){
+             report.push(`BALANCE OF ACCOUNT: ${account_name}`)
              report.push(this.get_balance(account_name))
+             
             }
         }
         else {
             if(this.get_account_registry((account as Account).value)){
+               report.push(`BALANCE OF ACCOUNT: ${(account as Account).value}`)
                report.push(this.get_balance((account as Account).value))
             }       
         }
@@ -219,7 +222,7 @@ export default class Interpreter {
         switch(block.type){
 
             case "AccountBlock":
-                this.process_account_blocks(block as AccountBlock) ;
+                this.process_account_blocks(block as AccountBlock);
                  break
             case "JournalBlock":
                 this.process_journal_blok(block as JournalBlock);
@@ -228,8 +231,10 @@ export default class Interpreter {
                 this.process_opening_blocks(block as OpeningBlock);
                 break
             case "CloseBlock":
-                this.process_close_block(block as CloseBlock)
-           
+                this.process_close_block(block as CloseBlock);
+            case "ReportBlock":
+                this.process_report_block(block as ReportBlock);
+                break
             default:
                 throw new Error("The block type has not been recognized")
                 
