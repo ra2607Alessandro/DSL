@@ -145,7 +145,7 @@ export default class Interpreter {
         let  postingTarget = {} as Posting;
         if (amount > 0) {
             postingSource = {
-                account: source,
+                account: target,
                 side: "debit",
                 amount: amount,
                 ID: `CLOSE-${block.date}`,
@@ -153,7 +153,7 @@ export default class Interpreter {
                 description: `Closing ${source} to ${target}`
             } ;
             postingTarget = {
-                account: target,
+                account: source,
                 side: "credit",
                 amount: amount,
                 ID: `CLOSE-${block.date}`,
@@ -163,7 +163,7 @@ export default class Interpreter {
         } 
         else if (amount < 0) {
             postingSource = {
-                account: source,
+                account: target,
                 side: "credit",
                 amount: Math.abs(amount),
                 ID: `CLOSE-${block.date}`,
@@ -171,7 +171,7 @@ export default class Interpreter {
                 description: `Closing ${source} to ${target}`
             };
             postingTarget = {
-                account: target,
+                account: source,
                 side: "debit",
                 amount: Math.abs(amount),
                 ID: `CLOSE-${block.date}`,
@@ -195,6 +195,7 @@ export default class Interpreter {
    }
 
    private process_report_block(block: ReportBlock){
+    console.log("REPORT")
     const report = new Array<any>();
     for(const account of block.accounts){
         if(account == "ALL"){
@@ -232,9 +233,9 @@ export default class Interpreter {
                 break
             case "CloseBlock":
                 this.process_close_block(block as CloseBlock);
-            case "ReportBlock":
-                this.process_report_block(block as ReportBlock);
                 break
+            case "ReportBlock":
+                return this.process_report_block(block as ReportBlock);
             default:
                 throw new Error("The block type has not been recognized")
                 

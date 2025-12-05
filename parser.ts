@@ -110,15 +110,15 @@ export default class Parser {
     private parseReport(): ReportBlock {
         this.expect(TokenType.REPORT, "Expected: 'REPORT'");
         this.expect(TokenType.Colon, "Expected: ':' ")
-        this.expect(TokenType.OpenBrace, "Expected: '{'");
+       
         const accounts = new Array<Account>()
-        while(!this.match(TokenType.CloseBrace)){
+        while(!this.is_eof() && this.match(TokenType.Identifier)){
             if( this.peek().value == "ALL" && this.advance().type == TokenType.CloseBrace){
                 return {type: "Report", accounts: this.peek().value} as ReportBlock
             }
             accounts.push(...this.parseAccounts())
         }
-        this.expect(TokenType.CloseBrace, "Expected: '}")
+       
         return {type: "Report", accounts: accounts} as ReportBlock
     }
 
