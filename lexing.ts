@@ -15,6 +15,7 @@ export enum TokenType {
     BinaryOp,
     Flow_Movement,
     Colon,
+    ALL,
     EOF,
     Account_Types
 }
@@ -31,6 +32,7 @@ const KEYWORDS : Record<string,TokenType> = {
     "OPEN": TokenType.Opening,
     "CLOSE": TokenType.Closing,
     "REPORT": TokenType.REPORT,
+    "ALL": TokenType.ALL,
     "asset": TokenType.Account_Types,
     "liability": TokenType.Account_Types,
     "revenue": TokenType.Account_Types,

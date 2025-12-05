@@ -113,7 +113,7 @@ export default class Parser {
        
         const accounts = new Array<Account>()
         while(!this.is_eof() && this.match(TokenType.Identifier)){
-            if( this.peek().value == "ALL"){
+            if( this.peek().type == TokenType.ALL){
                 const account = this.peek().value;
                 return {type: "Report", accounts: account} as ReportBlock
             }
@@ -175,7 +175,7 @@ export default class Parser {
                 body.push(ReportBlock)
             }
             else {
-                throw new Error(`Unrecognized Token could not be parsed: ${this.peek()}` );
+                throw new Error(`Unrecognized Token could not be parsed: ${console.log(this.peek())}` );
             }
             
         }
