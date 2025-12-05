@@ -113,6 +113,9 @@ export default class Parser {
         this.expect(TokenType.OpenBrace, "Expected: '{'");
         const accounts = new Array<Account>()
         while(!this.match(TokenType.CloseBrace)){
+            if( this.peek().value == "ALL" && this.advance().type == TokenType.CloseBrace){
+                return {type: "Report", accounts: this.peek().value} as ReportBlock
+            }
             accounts.push(...this.parseAccounts())
         }
         this.expect(TokenType.CloseBrace, "Expected: '}")

@@ -1,5 +1,5 @@
 import { Runtime } from "inspector/promises";
-import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction, CloseBlock } from "./ast"; 
+import { Account_Types, AccountBlock, JournalBlock, Movement, OpeningBlock, Program, Transaction, CloseBlock, ReportBlock } from "./ast"; 
 import { AccountMetaData, Posting } from "./ds";
 import Parser from "./parser"
 import fs = require('fs');
@@ -191,10 +191,19 @@ export default class Interpreter {
         this.ledger[source].push(postingSource);
         this.ledger[target].push(postingTarget);
     }
-       
 
-    
+   }
 
+   private process_report_block(block: ReportBlock){
+    for(const account of block.accounts){
+        if(account == "ALL"){
+            for (const account_name in this.accountRegistry)
+            return this.get_balance(account_name)
+        }
+        else {
+            
+        }
+    }
    }
 
    public Interpret(program: Program){
@@ -211,6 +220,8 @@ export default class Interpreter {
             case "OpeningBlock":
                 this.process_opening_blocks(block as OpeningBlock);
                 break
+            case "CloseBlock":
+                this.process_close_block(block as CloseBlock)
            
             default:
                 throw new Error("The block type has not been recognized")
