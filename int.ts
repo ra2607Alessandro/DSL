@@ -8,6 +8,7 @@ export default class Interpreter {
    private accountRegistry : Record<string, AccountMetaData> = {};
    private ledger : Record<string, Posting[]> = {} ;
    private openings : Record<string,Posting> = {} ;
+   private report :any[] = []
    private txnCounter = 0;
 
    private process_account_blocks(block: AccountBlock){
@@ -196,24 +197,23 @@ export default class Interpreter {
 
    private process_report_block(block: ReportBlock){
     console.log("REPORT")
-    const report = new Array<any>();
+    
     for(const account of block.accounts){
         if(account == "ALL"){
             for (const account_name in this.accountRegistry){
-             report.push(`BALANCE OF ACCOUNT: ${account_name}`)
-             report.push(this.get_balance(account_name))
+             this.report.push(`BALANCE OF ACCOUNT: ${account_name}`)
+             this.report.push(this.get_balance(account_name))
              
             }
         }
         else {
             if(this.get_account_registry((account as Account).value)){
-               report.push(`BALANCE OF ACCOUNT: ${(account as Account).value}`)
-               report.push(this.get_balance((account as Account).value))
+               this.report.push(`BALANCE OF ACCOUNT: ${(account as Account).value}`)
+               this.report.push(this.get_balance((account as Account).value))
             }       
         }
     }
 
-    return report
 
    }
 
@@ -235,7 +235,8 @@ export default class Interpreter {
                 this.process_close_block(block as CloseBlock);
                 break
             case "ReportBlock":
-                return this.process_report_block(block as ReportBlock);
+                 this.process_report_block(block as ReportBlock);
+                 return this.report;
             default:
                 throw new Error("The block type has not been recognized")
                 
@@ -288,21 +289,8 @@ export default class Interpreter {
     }
 }
 
-const int = new Interpreter();
-const parser = new Parser();
-const test = fs.readFileSync("test.txt", "utf-8");
-const t = parser.ProduceAst(test);
-int.Interpret(t);
-console.log("Account Registry:");
-console.log("=====================");
-console.log(JSON.stringify(int.get_account_registry(), null, 2));
-console.log("=====================");
-console.log("Ledger:");
-console.log("=====================");
-console.log(JSON.stringify(int.get_ledger(), null, 2));
-console.log("Openings Registry");
-console.log("=====================");
-console.log(JSON.stringify(int.get_openings(), null, 2));
-console.log("Balance for Cash");
-console.log("=====================");
-console.log(JSON.stringify(int.get_balance("Cash"),null,2));
+//const int = new Interpreter();
+//const parser = new Parser();
+//const test = fs.readFileSync("test.txt", "utf-8");
+//const t = parser.ProduceAst(test);
+//int.Interpret(t);

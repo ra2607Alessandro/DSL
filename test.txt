@@ -30,3 +30,11 @@
       Cash -> VATDebit 15402.20
   }
 }
+
+  CLOSE 2024-12-31 {
+    SalesRevenue -> RetainedEarnings 0
+    VATDebit -> RetainedEarnings 0
+
+  }
+
+  REPORT: ALL
