@@ -42,7 +42,8 @@ export interface JournalBlock extends Stat {
 
 export interface ReportBlock extends Stat {
     type: "Report",
-    accounts: Account[] | "ALL"
+    accounts?: Account[] 
+    all: boolean
     
 }
 

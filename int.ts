@@ -198,15 +198,15 @@ export default class Interpreter {
    private process_report_block(block: ReportBlock){
     console.log("REPORT")
     
-    for(const account of block.accounts){
-        if(account == "ALL"){
+    if(block.all == true){
             for (const account_name in this.accountRegistry){
              this.report.push(`BALANCE OF ACCOUNT: ${account_name}`)
              this.report.push(this.get_balance(account_name))
-             
             }
-        }
-        else {
+    }
+    else if (block.accounts && block.all == false){
+    for(const account of block.accounts){
+        
             if(this.get_account_registry((account as Account).value)){
                this.report.push(`BALANCE OF ACCOUNT: ${(account as Account).value}`)
                this.report.push(this.get_balance((account as Account).value))
