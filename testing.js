@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var int_1 = require("./int");
+var parser_1 = require("./parser");
+var fs = require("fs");
+var int = new int_1.default();
+var parser = new parser_1.default();
+var test = fs.readFileSync("test.txt", "utf-8");
+var t = parser.ProduceAst(test);
+console.log(JSON.stringify(int.Interpret(t), null, 2));

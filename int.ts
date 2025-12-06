@@ -269,6 +269,7 @@ export default class Interpreter {
         balance = this.openings[account_name].amount
     }
     
+    if(this.ledger[account_name]){
     for(const posting of this.ledger[account_name]){
        if(posting.side == "debit"){
             balance -= posting.amount
@@ -278,6 +279,7 @@ export default class Interpreter {
             balance += posting.amount
         }
        }
+    }
     
     return balance
     }
