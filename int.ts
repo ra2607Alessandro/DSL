@@ -164,7 +164,7 @@ export default class Interpreter {
         } 
         else if (amount < 0) {
             postingSource = {
-                account: target,
+                account: source,
                 side: "credit",
                 amount: Math.abs(amount),
                 ID: `CLOSE-${block.date}`,
@@ -172,7 +172,7 @@ export default class Interpreter {
                 description: `Closing ${source} to ${target}`
             };
             postingTarget = {
-                account: source,
+                account: target,
                 side: "debit",
                 amount: Math.abs(amount),
                 ID: `CLOSE-${block.date}`,
@@ -189,8 +189,8 @@ export default class Interpreter {
             this.ledger[target] = [];
 
         }
-        this.ledger[source].push(postingSource);
-        this.ledger[target].push(postingTarget);
+        this.ledger[source].push(postingTarget);
+        this.ledger[target].push(postingSource);
     }
 
    }
