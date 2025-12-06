@@ -181,18 +181,15 @@ export default class Interpreter {
             };
         }
         // Append postings to ledger
-        if (!this.ledger[source]){
-            
+        if (!this.ledger[source]){  
             this.ledger[source] = [];
         }
         if (!this.ledger[target]) {
             this.ledger[target] = [];
-
         }
-        this.ledger[source].push(postingTarget);
-        this.ledger[target].push(postingSource);
+        this.ledger[source].push(postingSource);
+        this.ledger[target].push(postingTarget);
     }
-
    }
 
    private process_report_block(block: ReportBlock){
@@ -265,9 +262,6 @@ export default class Interpreter {
    }
 
    public get_balance(account_name: string){
-    if(!this.ledger[account_name]){
-        return 0;
-    }
 
     let balance = 0;
      
