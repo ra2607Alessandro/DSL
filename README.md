@@ -186,10 +186,4 @@ console.log(report);
 
 write a .txt file and connect it to the program attached and you won't have to write anymore Typescript.  
 
-## Error Handling
 
-The language includes validation for:
-- Transaction balance errors (debits ≠ credits)
-- Missing required syntax elements (braces, colons, etc.)
-- Invalid account types
-- Malformed dates and numbers
