@@ -154,30 +154,7 @@ REPORT: Cash AccountsReceivable
 
 ## Complete Example
 
-```
-ACCOUNTS {
-    Cash: asset
-    SalesRevenue: revenue
-    RetainedEarnings: equity
-}
-
-OPEN 2024-01-01 {
-    Cash 5000.00
-    RetainedEarnings -5000.00
-}
-
-JOURNAL {
-    TXN 2024-06-15 "Product sale" {
-        Cash -> SalesRevenue 2000.00
-    }
-}
-
-CLOSE 2024-12-31 {
-    SalesRevenue -> RetainedEarnings 0
-}
-
-REPORT: ALL
-```
+See the test.txt file in this repository
 
 ## Technical Details
 
